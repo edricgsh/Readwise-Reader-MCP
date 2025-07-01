@@ -8,8 +8,8 @@ import {
   Tool,
 } from '@modelcontextprotocol/sdk/types.js';
 import { parse } from 'node-html-parser';
-import { ReadwiseClient } from './readwise-client.js';
-import { CreateDocumentRequest, UpdateDocumentRequest, ListDocumentsParams } from './types.js';
+import { ReadwiseClient } from './readwise-client.ts';
+import { CreateDocumentRequest, UpdateDocumentRequest, ListDocumentsParams } from './types.ts';
 
 const server = new Server(
   {

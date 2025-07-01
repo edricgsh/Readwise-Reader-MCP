@@ -9,9 +9,11 @@
   },
   "preferGlobal": true,
   "files": [
+    "src/**/*",
     "dist/**/*",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "tsconfig.json"
   ],
   "keywords": [
     "mcp",
