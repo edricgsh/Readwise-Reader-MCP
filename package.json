@@ -4,6 +4,29 @@
   "description": "MCP server for Readwise Reader API",
   "main": "dist/index.js",
   "type": "module",
+  "bin": {
+    "readwise-reader-mcp": "./dist/index.js"
+  },
+  "preferGlobal": true,
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "mcp",
+    "readwise",
+    "reader",
+    "api",
+    "server",
+    "model-context-protocol"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
   "scripts": {
     "build": "tsc",
     "dev": "tsx src/index.ts",
