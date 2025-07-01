@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env bun
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
@@ -30,12 +30,12 @@ function initializeClient(): ReadwiseClient {
   if (readwiseClient) {
     return readwiseClient;
   }
-  
+
   const token = process.env.READWISE_TOKEN;
   if (!token) {
     throw new Error('Readwise access token not provided. Please set READWISE_TOKEN in your MCP configuration or environment variables. You can get your token from https://readwise.io/access_token');
   }
-  
+
   readwiseClient = new ReadwiseClient({ token });
   return readwiseClient;
 }
@@ -43,18 +43,18 @@ function initializeClient(): ReadwiseClient {
 // Convert URL content using jina.ai
 async function convertWithJina(url: string): Promise<string> {
   const jinaUrl = `https://r.jina.ai/${url}`;
-  
+
   const response = await fetch(jinaUrl, {
     headers: {
       'Accept': 'text/plain',
       'User-Agent': 'Readwise-MCP-Server/1.0.0'
     }
   });
-  
+
   if (!response.ok) {
     throw new Error(`Jina conversion failed: ${response.status}`);
   }
-  
+
   return response.text();
 }
 
@@ -63,19 +63,19 @@ function extractTextFromHtml(htmlContent: string): string {
   if (!htmlContent?.trim()) {
     return '';
   }
-  
+
   const root = parse(htmlContent);
-  
+
   // Remove non-content elements
   root.querySelectorAll('script, style, nav, header, footer').forEach(el => el.remove());
-  
+
   // Get title and body text
   const title = root.querySelector('title')?.text?.trim() || '';
   const bodyText = root.querySelector('body')?.text || root.text || '';
-  
+
   // Clean up whitespace
   const cleanText = bodyText.replace(/\s+/g, ' ').trim();
-  
+
   return title ? `${title}\n\n${cleanText}` : cleanText;
 }
 
@@ -84,11 +84,11 @@ async function convertUrlToText(url: string, category?: string): Promise<string>
   if (!url?.trim()) {
     return '';
   }
-  
+
   try {
     // Use jina for articles and PDFs, lightweight HTML parsing for others
     const shouldUseJina = !category || category === 'article' || category === 'pdf';
-    
+
     if (shouldUseJina) {
       return await convertWithJina(url);
     } else {
@@ -100,11 +100,11 @@ async function convertUrlToText(url: string, category?: string): Promise<string>
           'Accept': 'text/html,application/xhtml+xml'
         }
       });
-      
+
       if (!response.ok) {
         throw new Error(`HTML fetch failed: ${response.status}`);
       }
-      
+
       const html = await response.text();
       return extractTextFromHtml(html);
     }
@@ -309,12 +309,12 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       case 'readwise_list_documents': {
         const client = initializeClient();
         const params = args as ListDocumentsParams;
-        
+
         // If withFullContent is true, we also need HTML content
         if (params.withFullContent === true) {
           params.withHtmlContent = true;
         }
-        
+
         const response = await client.listDocuments(params);
 
         // Convert content to LLM-friendly text for documents only if withFullContent is explicitly true
@@ -343,7 +343,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                 }
               }
             }
-            
+
             const result: any = {
               id: doc.id,
               url: doc.url,
@@ -369,15 +369,15 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
               saved_at: doc.saved_at,
               last_moved_at: doc.last_moved_at,
             };
-            
+
             if (shouldIncludeContent) {
               result.content = content; // LLM-friendly text content instead of raw HTML
             }
-            
+
             if (params.withHtmlContent && doc.html_content) {
               result.html_content = doc.html_content;
             }
-            
+
             return result;
           })
         );
@@ -444,9 +444,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       case 'readwise_topic_search': {
         const client = initializeClient();
         const { searchTerms } = args as { searchTerms: string[] };
-        
+
         const matchingDocuments = await client.searchDocumentsByTopic(searchTerms);
-        
+
         const searchResults = {
           searchTerms,
           totalMatches: matchingDocuments.length,
