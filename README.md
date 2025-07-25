@@ -2,6 +2,10 @@
 
 A Model Context Protocol (MCP) server for the Readwise Reader API, built with TypeScript and the official Claude SDK.
 
+<a href="https://glama.ai/mcp/servers/@edricgsh/Readwise-Reader-MCP">
+  <img width="380" height="200" src="https://glama.ai/mcp/servers/@edricgsh/Readwise-Reader-MCP/badge" alt="Readwise Reader Server MCP server" />
+</a>
+
 ## Features
 
 - **Secure Authentication**: Uses environment variables for token storage
