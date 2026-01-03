@@ -75,7 +75,7 @@ Save a document (URL or HTML content) to Readwise Reader.
 - `html` (optional): HTML content of the document
 - `tags` (optional): Array of tags to add
 - `location` (optional): Location to save (`new`, `later`, `shortlist`, `archive`, `feed`)
-- `category` (optional): Document category (`article`, `book`, `tweet`, `pdf`, `email`, `youtube`, `podcast`)
+- `category` (optional): Document category (`article`, `email`, `rss`, `highlight`, `note`, `pdf`, `epub`, `tweet`, `video`)
 
 ### `readwise_list_documents`
 List documents from Readwise Reader with optional filtering. Returns complete document information including metadata and LLM-friendly text content.
@@ -107,8 +107,9 @@ Update a document in Readwise Reader.
 - `summary` (optional): New summary
 - `published_date` (optional): New published date (ISO 8601)
 - `image_url` (optional): New image URL
-- `location` (optional): New location
-- `category` (optional): New category
+- `location` (optional): New location (`new`, `later`, `archive`, `feed`) - **Note:** `shortlist` is not supported for updates
+- `category` (optional): New category (`article`, `email`, `rss`, `highlight`, `note`, `pdf`, `epub`, `tweet`, `video`)
+- `tags` (optional): Array of tags to assign to the document
 
 ### `readwise_delete_document`
 Delete a document from Readwise Reader.

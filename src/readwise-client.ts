@@ -1,9 +1,10 @@
-import { 
-  ReadwiseDocument, 
-  CreateDocumentRequest, 
-  UpdateDocumentRequest, 
-  ListDocumentsParams, 
+import {
+  ReadwiseDocument,
+  CreateDocumentRequest,
+  UpdateDocumentRequest,
+  ListDocumentsParams,
   ListDocumentsResponse,
+  ListTagsResponse,
   ReadwiseTag,
   ReadwiseConfig,
   APIResponse,
@@ -181,25 +182,10 @@ export class ReadwiseClient {
     }
   }
 
-  async deleteDocument(id: string): Promise<APIResponse<void>> {
-    try {
-      await this.makeRequest(`/delete/${id}/`, {
-        method: 'DELETE',
-      });
-      return this.createResponse(undefined);
-    } catch (error) {
-      if (error instanceof Error && error.message.startsWith('RATE_LIMIT:')) {
-        const seconds = parseInt(error.message.split(':')[1], 10);
-        throw new Error(`Rate limit exceeded. Too many requests. Please retry after ${seconds} seconds.`);
-      }
-      throw error;
-    }
-  }
-
   async listTags(): Promise<APIResponse<ReadwiseTag[]>> {
     try {
-      const result = await this.makeRequest<ReadwiseTag[]>('/tags/');
-      return this.createResponse(result);
+      const result = await this.makeRequest<ListTagsResponse>('/tags/');
+      return this.createResponse(result.results);
     } catch (error) {
       if (error instanceof Error && error.message.startsWith('RATE_LIMIT:')) {
         const seconds = parseInt(error.message.split(':')[1], 10);

@@ -9,10 +9,11 @@ export interface ReadwiseDocument {
   published_date?: string | number;
   image_url?: string;
   location: 'new' | 'later' | 'shortlist' | 'archive' | 'feed';
-  category?: 'article' | 'book' | 'tweet' | 'pdf' | 'email' | 'youtube' | 'podcast' | 'video';
+  category?: 'article' | 'email' | 'rss' | 'highlight' | 'note' | 'pdf' | 'epub' | 'tweet' | 'video';
   tags?: string[] | object;
   site_name?: string;
   word_count?: number | null;
+  reading_time?: string;
   created_at: string;
   updated_at: string;
   notes?: string;
@@ -23,14 +24,23 @@ export interface ReadwiseDocument {
   saved_at?: string;
   last_moved_at?: string;
   html_content?: string;
+  raw_source_url?: string;
 }
 
 export interface CreateDocumentRequest {
   url: string;
   html?: string;
+  should_clean_html?: boolean;
+  title?: string;
+  author?: string;
+  summary?: string;
+  published_date?: string;
+  image_url?: string;
+  location?: 'new' | 'later' | 'archive' | 'feed';
+  category?: 'article' | 'email' | 'rss' | 'highlight' | 'note' | 'pdf' | 'epub' | 'tweet' | 'video';
+  saved_using?: string;
   tags?: string[];
-  location?: 'new' | 'later' | 'shortlist' | 'archive' | 'feed';
-  category?: 'article' | 'book' | 'tweet' | 'pdf' | 'email' | 'youtube' | 'podcast';
+  notes?: string;
 }
 
 export interface UpdateDocumentRequest {
@@ -39,8 +49,10 @@ export interface UpdateDocumentRequest {
   summary?: string;
   published_date?: string;
   image_url?: string;
-  location?: 'new' | 'later' | 'shortlist' | 'archive' | 'feed';
-  category?: 'article' | 'book' | 'tweet' | 'pdf' | 'email' | 'youtube' | 'podcast';
+  seen?: boolean;
+  location?: 'new' | 'later' | 'archive' | 'feed';
+  category?: 'article' | 'email' | 'rss' | 'highlight' | 'note' | 'pdf' | 'epub' | 'tweet' | 'video';
+  tags?: string[];
 }
 
 export interface ListDocumentsParams {
@@ -48,10 +60,11 @@ export interface ListDocumentsParams {
   updatedAfter?: string;
   addedAfter?: string;
   location?: 'new' | 'later' | 'shortlist' | 'archive' | 'feed';
-  category?: 'article' | 'book' | 'tweet' | 'pdf' | 'email' | 'youtube' | 'podcast';
+  category?: 'article' | 'email' | 'rss' | 'highlight' | 'note' | 'pdf' | 'epub' | 'tweet' | 'video';
   tag?: string;
   pageCursor?: string;
   withHtmlContent?: boolean;
+  withRawSourceUrl?: boolean;
   withFullContent?: boolean;
   limit?: number;
 }
@@ -62,8 +75,14 @@ export interface ListDocumentsResponse {
   results: ReadwiseDocument[];
 }
 
+export interface ListTagsResponse {
+  count: number;
+  nextPageCursor?: string;
+  results: ReadwiseTag[];
+}
+
 export interface ReadwiseTag {
-  id: string;
+  key: string;
   name: string;
 }
 
